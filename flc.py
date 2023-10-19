@@ -222,15 +222,24 @@ def get_scores(img_path):
     # print(Color, Area, crispOutputFinal)
     return crispOutputFinal
 
-frames_path = 'D:\MTP\Code/analyse' #path to dir where frames are present
+frames_path = 'D:\MTP\mtp-firecausedetection/shortcircuit-frames' #path to dir where frames are present
 scores = []
-
+colors = []
+areas = []
 for fname in os.listdir(frames_path):
     img_path = os.path.join(frames_path, fname)
-    scores.append(get_scores(img_path))
-    print('__________',img_path, scores[-1])
-plt.plot(scores)
-print(scores)
+    # scores.append(get_scores(img_path))
+    # print('__________',img_path, scores[-1])
+    Color = cd.get_color(img_path)
+    Area = cd.get_area(img_path)
+    # Area = min(300,300*Area/100)
+    Color = 300*Color/255
+    colors.append(Color)
+    areas.append(Area)
+plt.plot(colors, color='red')
+plt.plot(areas, color='blue')
+plt.show()
+# print(scores)
 
 
 

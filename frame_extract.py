@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 # i.e if video of duration 30 seconds, saves 10 frame per second = 300 frames saved in total
-SAVING_FRAMES_PER_SECOND = 15
+SAVING_FRAMES_PER_SECOND = 10
 
 def format_timedelta(td):
     """Utility function to format timedelta objects in a cool way (e.g 00:00:20.05) 
@@ -31,7 +31,7 @@ def get_saving_frames_durations(cap, saving_fps):
 
 def main(video_file):
     filename, _ = os.path.splitext(video_file)
-    filename += "-extracted"
+    filename += "-frames"
     # make a folder by the name of the video file
     if not os.path.isdir(filename):
         os.mkdir(filename)

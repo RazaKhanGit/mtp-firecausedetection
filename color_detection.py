@@ -12,17 +12,13 @@ def get_img(img_path):
     y, cb, cr = cv2.split(ycbcr)
 
     l_mean, a_mean, b_mean = cv2.mean(lab)[:-1]
-    r_mean = cv2.mean(r)[0]
+
 
     lab_rule_1 = l >= l_mean
     lab_rule_2 = a >= a_mean
     lab_rule_3 = b >= b_mean
     lab_rule_4 = b >= a_mean
     lab_satisfied = lab_rule_1 & lab_rule_2 & lab_rule_3 & lab_rule_4
-
-    rgb_rule_1 = (r > g) & (g > b) # No chaining in numpy
-    rgb_rule_2 = r >= r_mean
-    rgb_satisfied = rgb_rule_1 & rgb_rule_2
 
     ycbcr_rule_1 = (r >= g) & (g > b)
     ycbcr_rule_2 = (r > 190) & (g > 100) & (b < 140)
@@ -33,7 +29,6 @@ def get_img(img_path):
 
 
     lab_convert = np.uint8(lab_satisfied) * 255
-    rgb_convert = np.uint8(rgb_satisfied) * 255
     ycbcr_convert = np.uint8(ycbcr_satisfied) * 255
 
     converted = lab_convert & ycbcr_convert
@@ -48,11 +43,12 @@ def get_img(img_path):
 
 def get_area(img_path): 
     _, satisfied, _ = get_img(img_path)
-    return satisfied.sum()/100
+    total_area = satisfied.shape[0]*satisfied.shape[1]
+    return 600*satisfied.sum()/total_area
 
 def get_color(img_path):
     _, satisfied, r = get_img(img_path)
     if satisfied.sum() == 0:
         return 0
-    return (satisfied*r).sum()/satisfied.sum()
+    return 300*(satisfied*r).sum()/(256*satisfied.sum())
 
